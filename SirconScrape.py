@@ -10,6 +10,7 @@ import time
 import os
 
 
+# This class will be used to scrape the sircon website on a yearly basis to get the licenses for the agents
 class SirconScrape:
     def __init__(self):
         self.driver = webdriver.Chrome()
