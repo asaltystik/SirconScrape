@@ -58,9 +58,11 @@ class SirconScrape:
             network.click()
 
             time.sleep(5)
+        # If the element is not found print the error
         except Exception as e:
             print(e)
 
+    # This function will click each agent in the table to get to the sub table
     def click_each_row(self, row_position=0):
         try:
             # Find the table class=table-container
@@ -72,8 +74,10 @@ class SirconScrape:
             if not rows:
                 return
 
+            # Set the index to the passed in row_position
             index = row_position
             row = rows[index]
+            # Get the current agent name from the row
             current_agent = row.find_element(By.CSS_SELECTOR, "div.name-value")
             name = current_agent.text
             # Now we have the agent name, I want to make the first name lowercase
@@ -81,19 +85,21 @@ class SirconScrape:
             name = name.split()
             first_name = name[0].lower()
             last_name = name[1][0].upper()
-            name = first_name + last_name
+            name = first_name + last_name  # Format the name to be first name lower last name upper
             print(name)
             # Click the agent to get to the sub table but open a new tab
             current_agent.click()
             self.parse_sub_table(name)
             time.sleep(1)
 
-            # Go back 2 pages
+            # Go back 2 pages to get back to the main page
             self.driver.execute_script("window.history.go(-2)")
             time.sleep(2)
             # Reload the page
             self.driver.refresh()
             time.sleep(3)
+            # Recursively call the function to click the next agent.
+            # We do this because the page reloads and the elements are no longer available
             self.click_each_row(index + 1)
         except Exception as e:
             print(e)
@@ -112,6 +118,7 @@ class SirconScrape:
             webdriver.ActionChains(self.driver).send_keys(Keys.ENTER).perform()
             time.sleep(7)
 
+            # now we must hit tab 6 more times to get to the all licenses tab
             for i in range(6):
                 webdriver.ActionChains(self.driver).send_keys(Keys.TAB).perform()
                 time.sleep(1)
@@ -125,6 +132,7 @@ class SirconScrape:
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.table-container")))
             rows = table.find_elements(By.CSS_SELECTOR, "tbody.suif-expandable-row-group")
 
+            # Dictionary to parse out unwanted text
             replace_dict = {
                 "Insurance Producer ": "",
                 "License ": "",
@@ -180,33 +188,42 @@ class SirconScrape:
                     row_text = row_text.replace(key, replace_dict[key])
                     time.sleep(.1)
 
+                # For whatever reason these dont get found in the replace_dict so lets just hard code them into this
                 row_text = row_text.replace("Active Actions Menu", "")
                 row_text = row_text.replace("Active Expiring Soon", "")
                 row_text = row_text.replace("Active", "")
 
+                # Replace the state names with the abbreviations
                 for key in state_abbr_dict:
                     row_text = row_text.replace(key, state_abbr_dict[key])
                 print("Text scrubbed adding to dataframe")
 
+                # Split the text by spaces - prep for adding to the dataframe
                 split_text = row_text.split(" ")
 
+                # creating a temp dataframe since df.append does not seem to work in this implementation
                 row_df = pd.DataFrame([{
-                    "Agent": agent_name,
-                    "State": split_text[0] if len(split_text) > 1 else "",
-                    "License Number": split_text[1] if len(split_text) > 2 else "",
-                    "Expiration Date": split_text[2] if len(split_text) > 3 else ""
+                    "Agent": agent_name,  # Add the agent name
+                    "State": split_text[0] if len(split_text) > 1 else "",  # Add the state
+                    "License Number": split_text[1] if len(split_text) > 2 else "",  # Add the license number
+                    "Expiration Date": split_text[2] if len(split_text) > 3 else ""  # Add the expiration date
                 }])
 
+                # Add the temp dataframe to the main dataframe
                 df = pd.concat([df, row_df], ignore_index=True)
 
+                # Print the agent name and the row text
                 print(agent_name + " - " + row_text)
                 time.sleep(1)
             print(df)
+            # Save the dataframe to a csv file to be sent to the server
             df.to_csv(agent_name + "-licenses.csv", index=False)
             time.sleep(10)
+        # If there is an error print the error
         except Exception as e:
             print(e)
 
+    # Function to close the browser
     def close_browser(self):
         self.driver.quit()
 
@@ -222,11 +239,6 @@ class SirconScrape:
             df = pd.concat([df, data], ignore_index=True)
         # Save the dataframe to a csv file
         df.to_csv("all-licenses.csv", index=False)
-
-
-
-
-
 
 
 scraper = SirconScrape()
