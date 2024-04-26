@@ -246,9 +246,9 @@ class SirconScrape:
 
 
 # Gonna clean this up later but for now this bit of code will be the __main__ function in all but name lol
-scraper = SirconScrape()
-scraper.open_browser()
-scraper.login()
-scraper.click_network()
-scraper.click_each_row(0)
-scraper.close_browser()
+scraper = SirconScrape()  # Create the scraper object
+scraper.open_browser()  # open the browser
+scraper.login()  # login to the site
+scraper.click_network()  # Click the network tab
+scraper.click_each_row(0)  # click each row in the table and parse the sub table
+scraper.close_browser()  # close the browser free some memory, Greedy ass cpu
