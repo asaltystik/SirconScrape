@@ -129,6 +129,7 @@ class SirconScrape:
                 # print(i)
             webdriver.ActionChains(self.driver).send_keys(Keys.ENTER).perform()
             time.sleep(7)
+            # Wait 7 seconds between each set of actions to allow the pages to load
 
             # We are now on the all licenses page Now we need to parse the table.
             # The table is in a div with class=table-container
