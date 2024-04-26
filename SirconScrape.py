@@ -35,6 +35,7 @@ class SirconScrape:
 
             # Submit the form
             password.send_keys(Keys.RETURN)
+        # If there is an error print the error
         except Exception as e:
             print(e)
         time.sleep(5)
@@ -46,6 +47,7 @@ class SirconScrape:
             x = 50
             y = 180
 
+            #  Set the actions to move to the network tab
             actions = ActionChains(self.driver)
 
             # Move to the network tab
@@ -56,8 +58,8 @@ class SirconScrape:
             network = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "a[href='/network/entities']")))
             network.click()
-
             time.sleep(5)
+
         # If the element is not found print the error
         except Exception as e:
             print(e)
@@ -71,6 +73,7 @@ class SirconScrape:
 
             rows = table.find_elements(By.CSS_SELECTOR, "tr.table-row")
 
+            # If there are no rows then leave the function
             if not rows:
                 return
 
@@ -101,6 +104,7 @@ class SirconScrape:
             # Recursively call the function to click the next agent.
             # We do this because the page reloads and the elements are no longer available
             self.click_each_row(index + 1)
+        # If there is an error print the error
         except Exception as e:
             print(e)
 
@@ -241,6 +245,7 @@ class SirconScrape:
         df.to_csv("all-licenses.csv", index=False)
 
 
+# Gonna clean this up later but for now this bit of code will be the __main__ function in all but name lol
 scraper = SirconScrape()
 scraper.open_browser()
 scraper.login()
