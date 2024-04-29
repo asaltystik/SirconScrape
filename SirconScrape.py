@@ -156,6 +156,8 @@ class SirconScrape:
                 "Actions Menu ": "",
                 "Expiring Soon ": "",
                 "Active License ": "",
+                "SUBLICENSEE ": "",
+                "Producer ": "",
             }
 
             # dictionary to replace the state names with abbreviations
