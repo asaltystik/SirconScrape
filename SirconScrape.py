@@ -31,7 +31,7 @@ class SirconScrape:
             # Enter the login information
             account_id.send_keys("34017")
             username.send_keys("securecare65")
-            password.send_keys("Secure1037*")
+            password.send_keys("Secure33760$")
 
             # Submit the form
             password.send_keys(Keys.RETURN)
