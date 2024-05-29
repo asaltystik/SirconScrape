@@ -52,13 +52,13 @@ class SirconScrape:
 
             # Move to the network tab
             actions.move_by_offset(x, y).click().perform()
-            time.sleep(.5)
+            time.sleep(.8)
 
             # Find the element with href="/network/entities
             network = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "a[href='/network/entities']")))
             network.click()
-            time.sleep(5)
+            time.sleep(6)
 
         # If the element is not found print the error
         except Exception as e:
@@ -72,6 +72,8 @@ class SirconScrape:
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.table-container")))
 
             rows = table.find_elements(By.CSS_SELECTOR, "tr.table-row")
+            print("Rows: ", len(rows))
+            print("Row Names: ", [row.find_element(By.CSS_SELECTOR, "div.name-value").text for row in rows])
 
             # If there are no rows then leave the function
             if not rows:
@@ -92,15 +94,17 @@ class SirconScrape:
             print(name)
             # Click the agent to get to the sub table but open a new tab
             current_agent.click()
+            print("Parse Sub Table")
             self.parse_sub_table(name)
-            time.sleep(1)
+            print("Sub Table Parsed for agent: " + name)
+            time.sleep(2)
 
             # Go back 2 pages to get back to the main page
             self.driver.execute_script("window.history.go(-2)")
-            time.sleep(2)
+            time.sleep(10)
             # Reload the page
             self.driver.refresh()
-            time.sleep(3)
+            time.sleep(10)
             # Recursively call the function to click the next agent.
             # We do this because the page reloads and the elements are no longer available
             self.click_each_row(index + 1)
@@ -111,25 +115,34 @@ class SirconScrape:
     # This is the function that will be parsing the sub tables
     def parse_sub_table(self, agent_name):
         try:
-            time.sleep(10)
+            time.sleep(15)
             print("Navigating to licenses")
+            navigation = True
+            try:
+                while navigation:
+                    # Lets hit tab 13 times to get to the licenses tab
+                    for i in range(4):
+                        webdriver.ActionChains(self.driver).send_keys(Keys.TAB).perform()
+                        time.sleep(2)
+                        # print(i)
+                    webdriver.ActionChains(self.driver).send_keys(Keys.ENTER).perform()
+                    time.sleep(8)
 
-            # Lets hit tab 13 times to get to the licenses tab
-            for i in range(4):
-                webdriver.ActionChains(self.driver).send_keys(Keys.TAB).perform()
-                time.sleep(1)
-                # print(i)
-            webdriver.ActionChains(self.driver).send_keys(Keys.ENTER).perform()
-            time.sleep(7)
-
-            # now we must hit tab 6 more times to get to the all licenses tab
-            for i in range(6):
-                webdriver.ActionChains(self.driver).send_keys(Keys.TAB).perform()
-                time.sleep(1)
-                # print(i)
-            webdriver.ActionChains(self.driver).send_keys(Keys.ENTER).perform()
-            time.sleep(7)
-            # Wait 7 seconds between each set of actions to allow the pages to load
+                    # now we must hit tab 6 more times to get to the all licenses tab
+                    for i in range(6):
+                        webdriver.ActionChains(self.driver).send_keys(Keys.TAB).perform()
+                        time.sleep(2)
+                        # print(i)
+                    webdriver.ActionChains(self.driver).send_keys(Keys.ENTER).perform()
+                    time.sleep(8)
+                    # Wait 7 seconds between each set of actions to allow the pages to load+
+                    navigation = False  # we should be done navigating so lets set this to false
+            except Exception as e:
+                # reload the page if there is an error and try again
+                self.driver.refresh()
+                time.sleep(5)
+                print(e)
+                navigation = True
 
             # We are now on the all licenses page Now we need to parse the table.
             # The table is in a div with class=table-container
@@ -157,7 +170,11 @@ class SirconScrape:
                 "Expiring Soon ": "",
                 "Active License ": "",
                 "SUBLICENSEE ": "",
+                "SUBLICENSEE": "",
                 "Producer ": "",
+                "Producer": "",
+                "(NonResident) ": "",
+                "(NonResident)": "",
             }
 
             # dictionary to replace the state names with abbreviations
@@ -250,8 +267,9 @@ class SirconScrape:
 
 # Gonna clean this up later but for now this bit of code will be the __main__ function in all but name lol
 scraper = SirconScrape()  # Create the scraper object
-scraper.open_browser()  # open the browser
-scraper.login()  # login to the site
-scraper.click_network()  # Click the network tab
-scraper.click_each_row(0)  # click each row in the table and parse the sub table
-scraper.close_browser()  # close the browser free some memory, Greedy ass cpu
+#scraper.open_browser()  # open the browser
+#scraper.login()  # login to the site
+#scraper.click_network()  # Click the network tab
+#craper.click_each_row(0)  # click each row in the table and parse the sub table
+#scraper.close_browser()  # close the browser free some memory, Greedy ass cpu
+scraper.condensecsv()
