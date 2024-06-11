@@ -110,9 +110,9 @@ class LeadScraper:
 
 
 # Initialize the class with the username, password, and user
-username = 'marcelo@securecare65.com'
-password = 'Halamadrid1'
-user = 'Marcelo Polar'
+#username = 'marcelo@securecare65.com'
+#p#as#swo#rd = '###Halamadrid1###'
+# user = 'Marcelo Polar'
 lead_scraper = LeadScraper(username, password, user)
 lead_scraper.login()
 lead_scraper.scrape_leads()
