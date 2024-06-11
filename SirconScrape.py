@@ -20,7 +20,7 @@ class SirconScrape:
         self.driver.get("https://www.sircon.com/login.jsp?accountType=business")
         time.sleep(5)
 
-    # Function to login to the sircon website
+    # Function to log in to the sircon website
     def login(self):
         try:
             # Wait until the inputs are available
