@@ -31,7 +31,7 @@ class SirconScrape:
             # Enter the login information
             account_id.send_keys("34017")
             username.send_keys("securecare65")
-            password.send_keys("Secure33760$")
+            password.send_keys("Secure33760#")
 
             # Submit the form
             password.send_keys(Keys.RETURN)
@@ -97,14 +97,14 @@ class SirconScrape:
             print("Parse Sub Table")
             self.parse_sub_table(name)
             print("Sub Table Parsed for agent: " + name)
-            time.sleep(2)
+            time.sleep(4)
 
             # Go back 2 pages to get back to the main page
             self.driver.execute_script("window.history.go(-2)")
-            time.sleep(10)
+            time.sleep(20)
             # Reload the page
             self.driver.refresh()
-            time.sleep(10)
+            time.sleep(20)
             # Recursively call the function to click the next agent.
             # We do this because the page reloads and the elements are no longer available
             self.click_each_row(index + 1)
@@ -143,6 +143,28 @@ class SirconScrape:
                 time.sleep(5)
                 print(e)
                 navigation = True
+
+            # Scroll to down the page using the page down key
+            for i in range(8):
+                webdriver.ActionChains(self.driver).send_keys(Keys.PAGE_DOWN).perform()
+                time.sleep(.5)
+            time.sleep(1)
+            # we want to hit the selection box with class="ng-pristine ng-valid ng-touched"
+            # this will allow us to select all licenses
+            print('Attempting to select all licenses')
+            element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "input.ng-pristine.ng-valid.ng-touched")))
+            element.click()
+            print('clicked drop down')
+            element.send_keys(Keys.DOWN)
+            element.send_keys(Keys.ENTER)
+            time.sleep(2)
+
+            # click the element with class="ng-pristine ng-valid ng-touched"
+            element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "input.ng-pristine.ng-valid.ng-touched")))
+            element.click()
+            time.sleep(5)
 
             # We are now on the all licenses page Now we need to parse the table.
             # The table is in a div with class=table-container
