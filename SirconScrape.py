@@ -32,6 +32,9 @@ class SirconScrape:
             account_id.send_keys("34017")
             username.send_keys("securecare65")
             password.send_keys("Secure33760#")
+            # account_id.send_keys("87880")
+            # username.send_keys("chrisbeckett217@gmail.com")
+            # password.send_keys("aNNUITY123!")
 
             # Submit the form
             password.send_keys(Keys.RETURN)
@@ -151,20 +154,20 @@ class SirconScrape:
             time.sleep(1)
             # we want to hit the selection box with class="ng-pristine ng-valid ng-touched"
             # this will allow us to select all licenses
-            print('Attempting to select all licenses')
-            element = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "input.ng-pristine.ng-valid.ng-touched")))
-            element.click()
-            print('clicked drop down')
-            element.send_keys(Keys.DOWN)
-            element.send_keys(Keys.ENTER)
-            time.sleep(2)
+            # print('Attempting to select all licenses')
+            # element = WebDriverWait(self.driver, 10).until(
+            #     EC.presence_of_element_located((By.CSS_SELECTOR, "input.ng-pristine.ng-valid.ng-touched")))
+            # element.click()
+            # print('clicked drop down')
+            # element.send_keys(Keys.DOWN)
+            # element.send_keys(Keys.ENTER)
+            # time.sleep(2)
 
             # click the element with class="ng-pristine ng-valid ng-touched"
-            element = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "input.ng-pristine.ng-valid.ng-touched")))
-            element.click()
-            time.sleep(5)
+            # element = WebDriverWait(self.driver, 10).until(
+            #     EC.presence_of_element_located((By.CSS_SELECTOR, "input.ng-pristine.ng-valid.ng-touched")))
+            # element.click()
+            # time.sleep(5)
 
             # We are now on the all licenses page Now we need to parse the table.
             # The table is in a div with class=table-container
@@ -284,7 +287,7 @@ class SirconScrape:
             data = pd.read_csv(file)
             df = pd.concat([df, data], ignore_index=True)
         # Save the dataframe to a csv file
-        df.to_csv("all-licenses.csv", index=False)
+        df.to_csv("all-licenses1.csv", index=False)
 
 
 # Gonna clean this up later but for now this bit of code will be the __main__ function in all but name lol
