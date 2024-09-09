@@ -70,6 +70,8 @@ class SirconScrape:
     # This function will click each agent in the table to get to the sub table
     def click_each_row(self, row_position=0):
         try:
+            # Lets give the page some time to load and let me change how many rows are displayed
+            time.sleep(20)
             # Find the table class=table-container
             table = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.table-container")))
@@ -151,7 +153,8 @@ class SirconScrape:
             for i in range(8):
                 webdriver.ActionChains(self.driver).send_keys(Keys.PAGE_DOWN).perform()
                 time.sleep(.5)
-            time.sleep(1)
+            # Gotta do this manually because the drop down is not working
+            time.sleep(15)
             # we want to hit the selection box with class="ng-pristine ng-valid ng-touched"
             # this will allow us to select all licenses
             # print('Attempting to select all licenses')
@@ -287,7 +290,7 @@ class SirconScrape:
             data = pd.read_csv(file)
             df = pd.concat([df, data], ignore_index=True)
         # Save the dataframe to a csv file
-        df.to_csv("all-licenses1.csv", index=False)
+        df.to_csv("all-licenses.csv", index=False)
 
 
 # Gonna clean this up later but for now this bit of code will be the __main__ function in all but name lol
