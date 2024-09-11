@@ -70,8 +70,8 @@ class SirconScrape:
     # This function will click each agent in the table to get to the sub table
     def click_each_row(self, row_position=0):
         try:
-            # Lets give the page some time to load and let me change how many rows are displayed
-            time.sleep(20)
+            # pause until enter is pressed in the console
+            input("Select the number of rows to display and press enter")
             # Find the table class=table-container
             table = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.table-container")))
@@ -109,8 +109,8 @@ class SirconScrape:
             time.sleep(20)
             # Reload the page
             self.driver.refresh()
-            time.sleep(20)
             # Recursively call the function to click the next agent.
+            time.sleep(5)
             # We do this because the page reloads and the elements are no longer available
             self.click_each_row(index + 1)
         # If there is an error print the error
@@ -154,23 +154,7 @@ class SirconScrape:
                 webdriver.ActionChains(self.driver).send_keys(Keys.PAGE_DOWN).perform()
                 time.sleep(.5)
             # Gotta do this manually because the drop down is not working
-            time.sleep(15)
-            # we want to hit the selection box with class="ng-pristine ng-valid ng-touched"
-            # this will allow us to select all licenses
-            # print('Attempting to select all licenses')
-            # element = WebDriverWait(self.driver, 10).until(
-            #     EC.presence_of_element_located((By.CSS_SELECTOR, "input.ng-pristine.ng-valid.ng-touched")))
-            # element.click()
-            # print('clicked drop down')
-            # element.send_keys(Keys.DOWN)
-            # element.send_keys(Keys.ENTER)
-            # time.sleep(2)
-
-            # click the element with class="ng-pristine ng-valid ng-touched"
-            # element = WebDriverWait(self.driver, 10).until(
-            #     EC.presence_of_element_located((By.CSS_SELECTOR, "input.ng-pristine.ng-valid.ng-touched")))
-            # element.click()
-            # time.sleep(5)
+            input('Select the proper amount of rows to grab and press enter')
 
             # We are now on the all licenses page Now we need to parse the table.
             # The table is in a div with class=table-container
