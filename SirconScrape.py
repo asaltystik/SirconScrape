@@ -31,7 +31,7 @@ class SirconScrape:
             # Enter the login information
             account_id.send_keys("34017")
             username.send_keys("securecare65")
-            password.send_keys("Secure33760#")
+            password.send_keys("Bulgaria65.")
             # account_id.send_keys("87880")
             # username.send_keys("chrisbeckett217@gmail.com")
             # password.send_keys("aNNUITY123!")
@@ -126,7 +126,7 @@ class SirconScrape:
             try:
                 while navigation:
                     # Lets hit tab 13 times to get to the licenses tab
-                    for i in range(4):
+                    for i in range(5):
                         webdriver.ActionChains(self.driver).send_keys(Keys.TAB).perform()
                         time.sleep(2)
                         # print(i)
